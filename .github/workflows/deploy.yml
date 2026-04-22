@@ -3,21 +3,25 @@ name: Deploy Website to S3
 on:
   push:
     branches:
-      - main  # האוטומציה תפעל בכל פעם שתעלה קוד לענף הראשי
+      - main
+
+
+permissions:
+  id-token: write
+  contents: read
 
 jobs:
   deploy:
     runs-on: ubuntu-latest
     steps:
     - name: Checkout code
-      uses: actions/checkout@v3
+      uses: actions/checkout@v4
 
     - name: Configure AWS credentials
-      uses: aws-actions/configure-aws-credentials@v1
+      uses: aws-actions/configure-aws-credentials@v4
       with:
-        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-        aws-region: eu-north-1 # שים לב: אם יצרת את הבאקט באזור אחר (כמו us-east-1), שנה כאן
+        role-to-assume: arn:aws:iam::996393379970:role/MichaelGitHubActionRole # שים כאן את ה-ARN שלך
+        aws-region: eu-north-1
 
     - name: Deploy to S3
       run: aws s3 sync . s3://michael-website-aws --delete --acl public-read --exclude ".github/*"
