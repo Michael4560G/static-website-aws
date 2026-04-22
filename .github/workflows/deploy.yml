@@ -20,8 +20,8 @@ jobs:
     - name: Configure AWS credentials
       uses: aws-actions/configure-aws-credentials@v4
       with:
-        role-to-assume: arn:aws:iam::996393379970:role/MichaelGitHubActionRole # שים כאן את ה-ARN שלך
+        role-to-assume: arn:aws:iam::996393379970:role/MichaelGitHubActionRole
         aws-region: eu-north-1
 
     - name: Deploy to S3
-      run: aws s3 sync . s3://michael-website-aws --delete --acl public-read --exclude ".github/*"
+    run: aws s3 sync . s3://michael-website-aws --delete
