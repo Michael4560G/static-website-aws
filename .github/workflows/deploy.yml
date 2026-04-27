@@ -1,9 +1,9 @@
-name: Deploy Website to S3
+name: Deploy Website to S3 and CloudFront
 
 on:
   push:
     branches:
-      - main
+      - main  # וודא שזה השם של ה-Branch שלך
 
 permissions:
   id-token: write
@@ -24,3 +24,10 @@ jobs:
 
       - name: Deploy to S3
         run: aws s3 sync . s3://michael-website-aws --delete
+
+      - name: Create CloudFront Invalidation
+        # כאן הוספנו את הפקודה החדשה לפי עמוד 43 במצגת
+        run: |
+          aws cloudfront create-invalidation \
+            --distribution-id ${{ secrets.CLOUDFRONT_DIST_ID }} \
+            --paths "/*"
